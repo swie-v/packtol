@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PackTol | Smart Travel Packing Checklist</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: "DM Sans", sans-serif;
+  background: #f8f5f6;
+  color: #252025;
+}
+
+header {
+  padding: 35px 20px 28px;
+  background: white;
+  border-bottom: 1px solid #eadfe3;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(42px, 8vw, 68px);
+  letter-spacing: -2px;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #8b7b81;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+section { padding: 85px 20px; }
+
+h2 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(34px, 5vw, 52px);
+  text-align: center;
+}
+
+.section-label {
+  text-align: center;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #b76d85;
+}
+
+.description {
+  max-width: 620px;
+  margin: 18px auto 0;
+  text-align: center;
+  color: #777;
+  line-height: 1.8;
+}
+
+/* HOME */
+
+.home-section { background: #f8f5f6; }
+
+.vibe-container {
+  max-width: 900px;
+  margin: 45px auto 0;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.vibe-card {
+  width: 390px;
+  min-height: 300px;
+  padding: 40px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: left;
+}
+
+.vibe-card:hover { transform: translateY(-8px); }
+
+.vibe-number {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.vibe-card h3 {
+  margin: 50px 0 15px;
+  font-family: "Playfair Display", serif;
+  font-size: 42px;
+}
+
+.vibe-card p { line-height: 1.7; }
+
+.choose-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pink-card {
+  background: #f3c6d5;
+  color: #542837;
+}
+
+.black-card {
+  background: #202020;
+  color: white;
+}
+
+/* TRIP SCREEN */
+
+#tripScreen {
+  display: none;
+  min-height: 100vh;
+  padding: 80px 20px;
+}
+
+.trip-title { text-align: center; }
+
+.trip-container {
+  max-width: 1000px;
+  margin: 45px auto;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.trip-card {
+  width: 280px;
+  padding: 35px 28px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.trip-card:hover { transform: translateY(-7px); }
+
+.trip-card h3 {
+  margin: 30px 0 12px;
+  font-family: "Playfair Display", serif;
+  font-size: 29px;
+}
+
+.trip-card p { line-height: 1.7; }
+
+.pink-theme .trip-card {
+  background: white;
+  color: #542837;
+  box-shadow: 0 8px 25px rgba(140,70,95,0.1);
+}
+
+.black-theme .trip-card {
+  background: #292929;
+  color: white;
+}
+
+.pink-theme {
+  background: #fdeef3;
+  color: #542837;
+}
+
+.black-theme {
+  background: #181818;
+  color: white;
+}
+
+.black-theme .description { color: #bbb; }
+
+/* CHECKLIST */
+
+#checklistScreen {
+  display: none;
+  min-height: 100vh;
+  padding: 70px 20px;
+}
+
+.checklist-container {
+  max-width: 850px;
+  margin: 45px auto;
+}
+
+.category {
+  background: white;
+  padding: 28px;
+  margin-bottom: 22px;
+  border-radius: 18px;
+}
+
+.category h3 {
+  margin: 0 0 20px;
+  font-family: "Playfair Display", serif;
+  font-size: 26px;
+}
+
+.pink-theme .category {
+  background: white;
+  color: #542837;
+}
+
+.black-theme .category {
+  background: #282828;
+  color: white;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pink-theme .item { background: #fff5f8; }
+.black-theme .item { background: #333; }
+
+.item:hover { transform: scale(1.02); }
+
+.item input {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* SELECT ALL CONTROLS */
+
+.checklist-actions {
+  max-width: 850px;
+  margin: 30px auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.checklist-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checklist-action-buttons button,
+.category-select-btn {
+  border: 1px solid currentColor;
+  border-radius: 30px;
+  padding: 11px 18px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pink-theme .checklist-action-buttons button,
+.pink-theme .category-select-btn {
+  background: #f3c6d5;
+  color: #542837;
+  border-color: #e8b3c6;
+}
+
+.black-theme .checklist-action-buttons button,
+.black-theme .category-select-btn {
+  background: #444;
+  color: white;
+  border-color: #666;
+}
+
+.selection-count {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.category-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.category-heading h3 { margin: 0; }
+
+.category-select-btn {
+  padding: 9px 14px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* BUTTONS */
+
+.button-container {
+  text-align: center;
+  margin-top: 35px;
+}
+
+.main-btn,
+.back-btn,
+.save-image-btn {
+  border: none;
+  border-radius: 30px;
+  padding: 16px 30px;
+  margin: 8px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.main-btn:hover,
+.back-btn:hover,
+.save-image-btn:hover {
+  transform: translateY(-3px);
+}
+
+.pink-theme .main-btn {
+  background: #542837;
+  color: white;
+}
+
+.black-theme .main-btn {
+  background: white;
+  color: #181818;
+}
+
+.back-btn {
+  background: transparent;
+  border: 1px solid currentColor;
+}
+
+.pink-theme .save-image-btn {
+  background: #f3c6d5;
+  color: #542837;
+}
+
+.black-theme .save-image-btn {
+  background: #444;
+  color: white;
+  border: 1px solid #666;
+}
+
+/* FINAL SCREEN */
+
+#finalScreen {
+  display: none;
+  min-height: 100vh;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.final-box {
+  max-width: 800px;
+  margin: auto;
+  padding: 50px 35px;
+  border-radius: 25px;
+  text-align: left;
+}
+
+.pink-theme .final-box {
+  background: white;
+  color: #542837;
+  box-shadow: 0 15px 40px rgba(140,70,95,0.12);
+}
+
+.black-theme .final-box {
+  background: #282828;
+  color: white;
+}
+
+.final-box h2 { text-align: center; }
+
+.final-info {
+  text-align: center;
+  margin: 12px 0 35px;
+  color: #888;
+}
+
+.black-theme .final-info { color: #bbb; }
+
+#finalList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.final-category {
+  padding: 22px;
+  border-radius: 16px;
+}
+
+.pink-theme .final-category { background: #fff2f6; }
+.black-theme .final-category { background: #333; }
+
+.final-category h3 {
+  margin-top: 0;
+  font-family: "Playfair Display", serif;
+}
+
+.final-category ul {
+  padding-left: 20px;
+  line-height: 2;
+}
+
+.screenshot-note {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+}
+
+.black-theme .screenshot-note { color: #bbb; }
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+  section,
+  #tripScreen,
+  #checklistScreen,
+  #finalScreen {
+    padding: 55px 15px;
+  }
+
+  .vibe-card,
+  .trip-card { width: 100%; }
+
+  .final-box { padding: 35px 20px; }
+
+  .checklist-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>PACKTOL</h1>
+  <p class="subtitle">Made by Rose</p>
+</header>
+
+<!-- HOME -->
+
+<section class="home-section" id="home">
+
+  <p class="section-label">Your Travel Companion</p>
+  <h2>Welcome to PackTol</h2>
+
+  <p class="description">
+    Choose your travel vibe and create a personalized packing list
+    based on your destination and the things you actually need.
+  </p>
+
+  <div class="vibe-container">
+
+    <div class="vibe-card pink-card" onclick="chooseTheme('pink')">
+      <span class="vibe-number">01 / PINK</span>
+      <h3>Pink Vibe</h3>
+      <p>
+        Soft, playful, and expressive.
+        Create your travel list with a lighter and creative style.
+      </p>
+      <span class="choose-text">Choose Pink →</span>
+    </div>
+
+    <div class="vibe-card black-card" onclick="chooseTheme('black')">
+      <span class="vibe-number">02 / BLACK</span>
+      <h3>Black Vibe</h3>
+      <p>
+        Clean, bold, and timeless.
+        Create your travel list with a modern and minimalist style.
+      </p>
+      <span class="choose-text">Choose Black →</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- TRIP SELECTION -->
+
+<section id="tripScreen">
+
+  <p class="section-label">Step 01</p>
+  <h2 class="trip-title">Where Are You Going?</h2>
+
+  <p class="description">
+    Choose the type of trip you are preparing for.
+  </p>
+
+  <div class="trip-container">
+
+    <div class="trip-card" onclick="chooseTrip('Beach Trip')">
+      <span class="vibe-number">01 / TRIP</span>
+      <h3>Beach Trip</h3>
+      <p>Perfect for sunny days, swimming, relaxing, and enjoying the sea.</p>
+    </div>
+
+    <div class="trip-card" onclick="chooseTrip('Mountain Trip')">
+      <span class="vibe-number">02 / TRIP</span>
+      <h3>Mountain Trip</h3>
+      <p>Prepare for hiking, outdoor adventures, and cooler weather.</p>
+    </div>
+
+    <div class="trip-card" onclick="chooseTrip('Sponty Trip')">
+      <span class="vibe-number">03 / TRIP</span>
+      <h3>Sponty Trip</h3>
+      <p>Perfect for spontaneous getaways, casual exploring, and last-minute plans.</p>
+    </div>
+
+  </div>
+
+  <div class="button-container">
+    <button class="back-btn" onclick="goHome()">Back</button>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+
+<section id="checklistScreen">
+
+  <p class="section-label">Step 02</p>
+  <h2 id="checklistTitle">Your Packing Checklist</h2>
+
+  <p class="description">
+    Select only the items you want to bring.
+    You can choose as many or as few as you need.
+  </p>
+
+  <div class="checklist-actions">
+    <div class="checklist-action-buttons">
+      <button type="button" onclick="selectAllItems(true)">Select All Items</button>
+      <button type="button" onclick="selectAllItems(false)">Clear All</button>
+    </div>
+    <span class="selection-count" id="selectionCount">0 ITEMS SELECTED</span>
+  </div>
+
+  <div class="checklist-container" id="checklistContent"></div>
+
+  <div class="button-container">
+    <button class="back-btn" onclick="backToTrips()">Back</button>
+    <button class="main-btn" onclick="generateList()">DONE</button>
+  </div>
+</section>
+
+<!-- FINAL LIST -->
+
+<section id="finalScreen">
+
+  <div class="final-box">
+
+    <p class="section-label">Step 03 / Final Result</p>
+    <h2>Your Final Packing List</h2>
+
+    <p class="final-info" id="finalTripInfo"></p>
+
+    <div id="finalList"></div>
+
+    <p class="screenshot-note">
+      Your packing list is ready! Save a copy of your list as an image or keep it for your next adventure.
+    </p>
+
+    <div class="button-container">
+      <button class="save-image-btn" onclick="saveAsImage()">Save as Image</button>
+      <button class="back-btn" onclick="backToChecklist()">Edit List</button>
+      <button class="back-btn" onclick="goHome()">Start Again</button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+
+/* DATA */
+
+const tripItems = {
+
+  "Beach Trip": {
+    "Clothing": [
+      "Swimsuit", "T-Shirt", "Shorts", "Dress",
+      "Extra Underwear", "Sleepwear", "Slippers", "Sandals"
+    ],
+
+    "Beach Essentials": [
+      "Sunscreen", "Towel", "Sunglasses", "Hat or Cap",
+      "Beach Bag", "Waterproof Pouch", "Umbrella",
+      "Water Bottle", "Reusable Bag"
+    ],
+
+    "Personal Care": [
+      "Toothbrush", "Toothpaste", "Soap", "Shampoo",
+      "Skincare Products", "Tissue", "Deodorant",
+      "Sanitary Products"
+    ],
+
+    "Gadgets": [
+      "Mobile Phone", "Phone Charger", "Power Bank",
+      "Earphones", "Camera"
+    ],
+
+    "Important Items": [
+      "Wallet", "Cash", "Valid ID", "Travel Tickets",
+      "Hotel Reservation", "Emergency Contact Information"
+    ]
+  },
+
+  "Mountain Trip": {
+    "Clothing": [
+      "Jacket", "Hoodie", "T-Shirt", "Long Pants",
+      "Shorts", "Extra Underwear", "Sleepwear",
+      "Raincoat", "Hiking Shoes", "Extra Socks"
+    ],
+
+    "Outdoor Essentials": [
+      "Backpack", "Water Bottle", "Snacks",
+      "Flashlight", "Rain Cover", "Map", "Reusable Bag"
+    ],
+
+    "Safety": [
+      "First Aid Kit", "Personal Medicine",
+      "Emergency Whistle", "Emergency Contact Information",
+      "Insect Repellent", "Sunscreen"
+    ],
+
+    "Personal Care": [
+      "Toothbrush", "Toothpaste", "Soap", "Shampoo",
+      "Deodorant", "Tissue", "Skincare Products"
+    ],
+
+    "Gadgets": [
+      "Mobile Phone", "Phone Charger", "Power Bank",
+      "Camera", "Earphones"
+    ],
+
+    "Important Items": [
+      "Wallet", "Cash", "Valid ID",
+      "Travel Tickets", "Hotel Reservation"
+    ]
+  },
+
+  "Sponty Trip": {
+    "Clothing": [
+      "T-Shirt", "Shirt", "Shorts", "Jeans",
+      "Dress", "Jacket", "Comfortable Shoes",
+      "Extra Underwear", "Sleepwear"
+    ],
+
+    "Personal Care": [
+      "Toothbrush", "Toothpaste", "Soap", "Shampoo",
+      "Deodorant", "Skincare Products", "Hairbrush", "Tissue"
+    ],
+
+    "Gadgets": [
+      "Mobile Phone", "Phone Charger", "Power Bank",
+      "Earphones", "Camera"
+    ],
+
+    "Quick Trip Essentials": [
+      "Wallet", "Cash", "Credit or Debit Card",
+      "Reusable Water Bottle", "Umbrella", "Small Backpack",
+      "Snacks", "Sunglasses"
+    ],
+
+    "Important Items": [
+      "Valid ID", "Emergency Contact Information",
+      "Booking Details"
+    ]
+  }
+
+};
+
+/* VARIABLES */
+
+let selectedTheme = "pink";
+let selectedTrip = "";
+let selectedItems = {};
+
+/* SCREEN FUNCTIONS */
+
+function hideAllScreens() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("tripScreen").style.display = "none";
+  document.getElementById("checklistScreen").style.display = "none";
+  document.getElementById("finalScreen").style.display = "none";
+}
+
+function applyTheme(element) {
+  element.classList.remove("pink-theme", "black-theme");
+
+  if (selectedTheme === "pink") {
+    element.classList.add("pink-theme");
+  } else {
+    element.classList.add("black-theme");
+  }
+}
+
+function chooseTheme(theme) {
+  selectedTheme = theme;
+  hideAllScreens();
+
+  const tripScreen = document.getElementById("tripScreen");
+  tripScreen.style.display = "block";
+  applyTheme(tripScreen);
+
+  window.scrollTo(0, 0);
+}
+
+function goHome() {
+  hideAllScreens();
+  document.getElementById("home").style.display = "block";
+  window.scrollTo(0, 0);
+}
+
+function backToTrips() {
+  saveSelections();
+
+  hideAllScreens();
+
+  const tripScreen = document.getElementById("tripScreen");
+  tripScreen.style.display = "block";
+  applyTheme(tripScreen);
+
+  window.scrollTo(0, 0);
+}
+
+/* TRIP FUNCTIONS */
+
+function chooseTrip(trip) {
+  selectedTrip = trip;
+  selectedItems = {};
+
+  hideAllScreens();
+
+  const checklistScreen = document.getElementById("checklistScreen");
+  checklistScreen.style.display = "block";
+  applyTheme(checklistScreen);
+
+  document.getElementById("checklistTitle").textContent =
+    trip + " Packing Checklist";
+
+  createChecklist();
+  window.scrollTo(0, 0);
+}
+
+/* CREATE CHECKLIST */
+
+function createChecklist() {
+  const container = document.getElementById("checklistContent");
+  container.innerHTML = "";
+
+  const categories = tripItems[selectedTrip];
+
+  for (const category in categories) {
+    const categoryBox = document.createElement("div");
+    categoryBox.className = "category";
+
+    const heading = document.createElement("div");
+    heading.className = "category-heading";
+
+    const title = document.createElement("h3");
+    title.textContent = category;
+
+    const selectButton = document.createElement("button");
+    selectButton.type = "button";
+    selectButton.className = "category-select-btn";
+    selectButton.textContent = "Select All";
+
+    const grid = document.createElement("div");
+    grid.className = "items-grid";
+
+    const categoryCheckboxes = [];
+
+    categories[category].forEach(function(item) {
+      const label = document.createElement("label");
+      label.className = "item";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = item;
+      checkbox.dataset.category = category;
+
+      checkbox.checked =
+        selectedItems[category] &&
+        selectedItems[category].includes(item);
+
+      checkbox.addEventListener("change", function() {
+        updateCategoryButton(selectButton, categoryCheckboxes);
+        updateSelectionCount();
+        saveSelections();
+      });
+
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(item));
+
+      grid.appendChild(label);
+      categoryCheckboxes.push(checkbox);
+    });
+
+    selectButton.onclick = function() {
+      const allChecked = categoryCheckboxes.every(box => box.checked);
+
+      categoryCheckboxes.forEach(function(box) {
+        box.checked = !allChecked;
+      });
+
+      updateCategoryButton(selectButton, categoryCheckboxes);
+      updateSelectionCount();
+      saveSelections();
+    };
+
+    heading.appendChild(title);
+    heading.appendChild(selectButton);
+
+    categoryBox.appendChild(heading);
+    categoryBox.appendChild(grid);
+    container.appendChild(categoryBox);
+
+    updateCategoryButton(selectButton, categoryCheckboxes);
+  }
+
+  updateSelectionCount();
+}
+
+/* SELECT ALL FUNCTIONS */
+
+function updateCategoryButton(button, checkboxes) {
+  const allChecked =
+    checkboxes.length > 0 &&
+    checkboxes.every(box => box.checked);
+
+  button.textContent = allChecked ? "Deselect All" : "Select All";
+}
+
+function selectAllItems(shouldSelect) {
+  const checkboxes = document.querySelectorAll(
+    "#checklistContent input[type='checkbox']"
+  );
+
+  checkboxes.forEach(function(box) {
+    box.checked = shouldSelect;
+  });
+
+  document.querySelectorAll(".category").forEach(function(categoryBox) {
+    const button = categoryBox.querySelector(".category-select-btn");
+
+    const categoryCheckboxes = Array.from(
+      categoryBox.querySelectorAll("input[type='checkbox']")
+    );
+
+    updateCategoryButton(button, categoryCheckboxes);
+  });
+
+  updateSelectionCount();
+  saveSelections();
+}
+
+function updateSelectionCount() {
+  const checkedItems = document.querySelectorAll(
+    "#checklistContent input[type='checkbox']:checked"
+  );
+
+  const counter = document.getElementById("selectionCount");
+
+  if (counter) {
+    counter.textContent = checkedItems.length + " ITEMS SELECTED";
+  }
+}
+
+function saveSelections() {
+  const checkedItems = document.querySelectorAll(
+    "#checklistContent input[type='checkbox']:checked"
+  );
+
+  const saved = {};
+
+  checkedItems.forEach(function(item) {
+    const category = item.dataset.category;
+
+    if (!saved[category]) {
+      saved[category] = [];
+    }
+
+    saved[category].push(item.value);
+  });
+
+  selectedItems = saved;
+}
+
+/* GENERATE FINAL LIST */
+
+function generateList() {
+  saveSelections();
+
+  const totalItems = Object.values(selectedItems).reduce(
+    (total, items) => total + items.length,
+    0
+  );
+
+  if (totalItems === 0) {
+    alert("Please select at least one item before generating your packing list.");
+    return;
+  }
+
+  hideAllScreens();
+
+  const finalScreen = document.getElementById("finalScreen");
+  finalScreen.style.display = "block";
+  applyTheme(finalScreen);
+
+  document.getElementById("finalTripInfo").textContent =
+    selectedTrip + " • " + totalItems + " items selected";
+
+  const finalList = document.getElementById("finalList");
+  finalList.innerHTML = "";
+
+  for (const category in selectedItems) {
+    const categoryBox = document.createElement("div");
+    categoryBox.className = "final-category";
+
+    const title = document.createElement("h3");
+    title.textContent = category;
+
+    const list = document.createElement("ul");
+
+    selectedItems[category].forEach(function(item) {
+      const listItem = document.createElement("li");
+      listItem.textContent = item;
+      list.appendChild(listItem);
+    });
+
+    categoryBox.appendChild(title);
+    categoryBox.appendChild(list);
+    finalList.appendChild(categoryBox);
+  }
+
+  window.scrollTo(0, 0);
+}
+
+/* SAVE FINAL PACKING LIST AS IMAGE */
+
+function saveAsImage() {
+  const categories = Object.entries(selectedItems).filter(function(entry) {
+    return entry[1].length > 0;
+  });
+
+  if (categories.length === 0) {
+    alert("Please select items before saving your packing list.");
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const width = 1100;
+  const padding = 70;
+  const lineHeight = 38;
+  const categoryGap = 28;
+  let totalHeight = 210 + padding;
+
+  categories.forEach(function(entry) {
+    totalHeight += 55 + (entry[1].length * lineHeight) + categoryGap;
+  });
+
+  totalHeight += 90;
+
+  canvas.width = width;
+  canvas.height = totalHeight;
+
+  const isPink = selectedTheme === "pink";
+  const background = isPink ? "#fdeef3" : "#181818";
+  const card = isPink ? "#ffffff" : "#282828";
+  const textColor = isPink ? "#542837" : "#ffffff";
+  const mutedColor = isPink ? "#9b7180" : "#c5c5c5";
+  const accent = isPink ? "#f3c6d5" : "#444444";
+
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, width, totalHeight);
+
+  ctx.fillStyle = card;
+  roundRect(ctx, 35, 35, width - 70, totalHeight - 70, 28);
+  ctx.fill();
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = mutedColor;
+  ctx.font = "bold 22px Arial";
+  ctx.fillText("PACKTOL • YOUR TRAVEL COMPANION", width / 2, 105);
+
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 48px Georgia";
+  ctx.fillText("Your Final Packing List", width / 2, 175);
+
+  const totalItems = categories.reduce(function(total, entry) {
+    return total + entry[1].length;
+  }, 0);
+
+  ctx.fillStyle = mutedColor;
+  ctx.font = "24px Arial";
+  ctx.fillText(
+    selectedTrip + " • " + totalItems + " items",
+    width / 2,
+    220
+  );
+
+  let y = 285;
+
+  categories.forEach(function(entry) {
+    const category = entry[0];
+    const items = entry[1];
+    const boxHeight = 48 + (items.length * lineHeight) + 24;
+
+    ctx.fillStyle = accent;
+    roundRect(ctx, padding, y, width - (padding * 2), boxHeight, 18);
+    ctx.fill();
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 27px Georgia";
+    ctx.fillText(category, padding + 28, y + 42);
+
+    ctx.font = "22px Arial";
+
+    let itemY = y + 82;
+
+    items.forEach(function(item) {
+      ctx.fillText("• " + item, padding + 32, itemY);
+      itemY += lineHeight;
+    });
+
+    y += boxHeight + categoryGap;
+  });
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = mutedColor;
+  ctx.font = "italic 22px Georgia";
+  ctx.fillText("Happy Travels!", width / 2, totalHeight - 75);
+
+  const link = document.createElement("a");
+  link.download = "PackTol-Packing-List.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
+/* BACK TO CHECKLIST */
+
+function backToChecklist() {
+  hideAllScreens();
+
+  const checklistScreen = document.getElementById("checklistScreen");
+  checklistScreen.style.display = "block";
+  applyTheme(checklistScreen);
+
+  createChecklist();
+  window.scrollTo(0, 0);
+}
+
+</script>
+
+</body>
+</html>
